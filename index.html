@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌴 Jungle Knowledge Safari</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', sans-serif;
+      background: linear-gradient(180deg, #87CEEB 0%, #98D8C8 50%, #6B8E23 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Animated jungle background */
+    .jungle-bg {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .tree {
+      position: absolute;
+      font-size: 120px;
+      opacity: 0.3;
+      animation: sway 4s ease-in-out infinite;
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: rotate(-2deg); }
+      50% { transform: rotate(2deg); }
+    }
+
+    .cloud {
+      position: absolute;
+      font-size: 60px;
+      animation: float-cloud 20s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes float-cloud {
+      from { transform: translateX(-100px); }
+      to { transform: translateX(calc(100vw + 100px)); }
+    }
+
+    .animal {
+      position: absolute;
+      font-size: 40px;
+      animation: bounce-animal 3s ease-in-out infinite;
+    }
+
+    @keyframes bounce-animal {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .butterfly {
+      position: absolute;
+      font-size: 30px;
+      animation: flutter 5s ease-in-out infinite;
+    }
+
+    @keyframes flutter {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(30px, -30px) rotate(10deg); }
+      50% { transform: translate(60px, 0) rotate(-10deg); }
+      75% { transform: translate(30px, 30px) rotate(10deg); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    .game-box {
+      background: linear-gradient(135deg, #FFF9C4 0%, #FFECB3 100%);
+      border-radius: 30px;
+      padding: 35px;
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        inset 0 -5px 20px rgba(139, 69, 19, 0.2);
+      border: 6px solid #8B4513;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-box::before {
+      content: '🌿';
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 35px;
+      opacity: 0.3;
+    }
+
+    .game-box::after {
+      content: '🦜';
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 35px;
+      opacity: 0.3;
+    }
+
+    .screen {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    h1 {
+      font-size: 3em;
+      text-align: center;
+      color: #2E7D32;
+      text-shadow: 
+        3px 3px 0 #FFF59D,
+        6px 6px 0 #FFB74D,
+        9px 9px 20px rgba(0, 0, 0, 0.3);
+      margin-bottom: 25px;
+      animation: titleBounce 2s ease-in-out infinite;
+      letter-spacing: 2px;
+    }
+
+    @keyframes titleBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 1.2em;
+      color: #5D4037;
+      margin-bottom: 25px;
+      font-weight: bold;
+    }
+
+    .form-group {
+      margin: 18px 0;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 15px 18px;
+      border-radius: 18px;
+      border: 3px solid #8B4513;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    label {
+      display: block;
+      font-size: 1.1em;
+      color: #2E7D32;
+      margin-bottom: 8px;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      font-size: 1em;
+      border: 3px solid #8B4513;
+      border-radius: 12px;
+      background: white;
+      font-family: 'Comic Sans MS', sans-serif;
+      transition: all 0.3s ease;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #FF6F00;
+      box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.1),
+        0 0 0 3px rgba(255, 111, 0, 0.2);
+      transform: scale(1.01);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px;
+      font-size: 1.2em;
+      font-weight: bold;
+      border: none;
+      border-radius: 18px;
+      cursor: pointer;
+      margin: 10px 0;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.2);
+      font-family: 'Comic Sans MS', sans-serif;
+    }
+
+    .btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #FF6F00 0%, #FF9800 100%);
+      color: white;
+      border: 3px solid #E65100;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
+      transform: scale(1.03) rotate(-1deg);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #7B1FA2 0%, #9C27B0 100%);
+      color: white;
+      border: 3px solid #6A1B9A;
+    }
+
+    .btn-secondary:hover {
+      background: linear-gradient(135deg, #9C27B0 0%, #BA68C8 100%);
+      transform: scale(1.03) rotate(1deg);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%);
+      color: white;
+      border: 3px solid #2E7D32;
+    }
+
+    .btn-success:hover {
+      background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+      transform: scale(1.03) rotate(-1deg);
+    }
+
+    .avatar-display {
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .avatar-big {
+      font-size: 100px;
+      display: inline-block;
+      animation: wiggle 2s ease-in-out infinite;
+      filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.3));
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: space-around;
+      background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+      padding: 15px;
+      border-radius: 20px;
+      margin: 15px 0;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+      border: 4px solid #FFD54F;
+    }
+
+    .stat-item {
+      text-align: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    .stat-value {
+      font-size: 1.8em;
+      display: block;
+      margin: 3px 0;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .stat-label {
+      font-size: 0.85em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.9;
+    }
+
+    .progress-jungle {
+      width: 100%;
+      height: 35px;
+      background: #8D6E63;
+      border-radius: 18px;
+      border: 3px solid #5D4037;
+      overflow: hidden;
+      box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.3);
+      position: relative;
+      margin: 15px 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #FFD54F 0%, #FFA726 50%, #FF6F00 100%);
+      width: 0%;
+      transition: width 0.5s ease;
+      position: relative;
+      box-shadow: 0 0 15px rgba(255, 193, 7, 0.6);
+    }
+
+    .progress-fill::after {
+      content: '🐾';
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+    }
+
+    .question-panel {
+      background: linear-gradient(135deg, #FFF9C4 0%, #FFECB3 100%);
+      padding: 30px;
+      border-radius: 25px;
+      border: 5px solid #8B4513;
+      margin: 25px 0;
+      box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.3),
+        inset 0 -3px 10px rgba(139, 69, 19, 0.2);
+      position: relative;
+      animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(-50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .question-category {
+      display: inline-block;
+      padding: 8px 20px;
+      background: linear-gradient(135deg, #7B1FA2 0%, #9C27B0 100%);
+      color: white;
+      border-radius: 18px;
+      font-size: 1em;
+      font-weight: bold;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 8px rgba(123, 31, 162, 0.4);
+    }
+
+    .question-text {
+      font-size: 1.7em;
+      color: #2E7D32;
+      text-align: center;
+      margin: 20px 0;
+      font-weight: bold;
+      line-height: 1.4;
+      text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+    }
+
+    .timer-big {
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .timer-circle {
+      display: inline-block;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF6F00 0%, #FF9800 100%);
+      border: 5px solid #E65100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5em;
+      color: white;
+      font-weight: bold;
+      box-shadow: 
+        0 6px 15px rgba(255, 111, 0, 0.4),
+        inset 0 -3px 8px rgba(0, 0, 0, 0.3);
+      animation: timerPulse 1s ease-in-out infinite;
+    }
+
+    @keyframes timerPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin: 25px 0;
+    }
+
+    .option-card {
+      padding: 25px 15px;
+      font-size: 1.2em;
+      font-weight: bold;
+      border-radius: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 4px solid transparent;
+      text-align: center;
+      position: relative;
+      animation: popIn 0.4s ease;
+      animation-fill-mode: backwards;
+      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .option-card:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .option-card:nth-child(1) {
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+      color: white;
+      animation-delay: 0.1s;
+    }
+
+    .option-card:nth-child(2) {
+      background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+      color: white;
+      animation-delay: 0.2s;
+    }
+
+    .option-card:nth-child(3) {
+      background: linear-gradient(135deg, #A8E6CF 0%, #7FD8BE 100%);
+      color: #2E7D32;
+      animation-delay: 0.3s;
+    }
+
+    .option-card:nth-child(4) {
+      background: linear-gradient(135deg, #FFD93D 0%, #FFA07A 100%);
+      color: #5D4037;
+      animation-delay: 0.4s;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0) rotate(-180deg); opacity: 0; }
+      to { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    .option-card:hover {
+      transform: scale(1.08) rotate(-2deg);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .option-card.correct {
+      background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%) !important;
+      border-color: #FFD700;
+      animation: correctJump 0.6s ease;
+      color: white !important;
+    }
+
+    .option-card.wrong {
+      background: linear-gradient(135deg, #F44336 0%, #E57373 100%) !important;
+      animation: wrongShake 0.5s ease;
+      color: white !important;
+    }
+
+    @keyframes correctJump {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-25px) scale(1.15); }
+    }
+
+    @keyframes wrongShake {
+      0%, 100% { transform: translateX(0) rotate(0deg); }
+      25% { transform: translateX(-12px) rotate(-4deg); }
+      75% { transform: translateX(12px) rotate(4deg); }
+    }
+
+    .message-box {
+      padding: 20px;
+      border-radius: 18px;
+      font-size: 1.3em;
+      font-weight: bold;
+      text-align: center;
+      margin: 18px 0;
+      border: 4px solid;
+      animation: messageSlide 0.5s ease;
+    }
+
+    @keyframes messageSlide {
+      from { transform: translateY(-25px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .message-box.success {
+      background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
+      color: #1B5E20;
+      border-color: #4CAF50;
+    }
+
+    .message-box.error {
+      background: linear-gradient(135deg, #FFCCBC 0%, #FFAB91 100%);
+      color: #BF360C;
+      border-color: #FF5722;
+    }
+
+    .final-screen {
+      text-align: center;
+      padding: 35px 20px;
+    }
+
+    .final-emoji {
+      font-size: 130px;
+      margin: 18px 0;
+      animation: spin 2s ease-in-out;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg) scale(0); }
+      to { transform: rotate(360deg) scale(1); }
+    }
+
+    .final-score {
+      font-size: 4.5em;
+      font-weight: bold;
+      background: linear-gradient(135deg, #FF6F00 0%, #FFD54F 50%, #FF6F00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 18px 0;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .final-message {
+      font-size: 1.6em;
+      color: #2E7D32;
+      margin: 18px 0;
+      font-weight: bold;
+    }
+
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      margin: 18px 0;
+    }
+
+    .history-table th {
+      background: linear-gradient(135deg, #2E7D32 0%, #388E3C 100%);
+      color: white;
+      padding: 15px;
+      font-size: 1.1em;
+      text-transform: uppercase;
+    }
+
+    .history-table td {
+      padding: 12px;
+      border-bottom: 2px solid #E0E0E0;
+      text-align: center;
+      font-size: 1em;
+    }
+
+    .history-table tr:hover {
+      background: #FFF9C4;
+    }
+
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .star {
+      position: absolute;
+      font-size: 30px;
+      animation: sparkle 1s ease-out forwards;
+    }
+
+    @keyframes sparkle {
+      0% { transform: scale(0) rotate(0deg); opacity: 1; }
+      100% { transform: scale(2) rotate(360deg); opacity: 0; }
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2.2em; }
+      .game-box { padding: 25px; border-radius: 25px; }
+      .question-text { font-size: 1.4em; }
+      .option-card { font-size: 1.1em; padding: 20px 12px; }
+      .avatar-big { font-size: 70px; }
+      .stats-bar { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Jungle Background Elements -->
+  <div class="jungle-bg">
+    <div class="tree" style="left: 5%; bottom: 0;">🌴</div>
+    <div class="tree" style="left: 85%; bottom: 0;">🌴</div>
+    <div class="cloud" style="top: 10%; animation-delay: 0s;">☁️</div>
+    <div class="cloud" style="top: 15%; animation-delay: 5s;">☁️</div>
+    <div class="cloud" style="top: 8%; animation-delay: 10s;">☁️</div>
+    <div class="animal" style="left: 15%; bottom: 100px;">🦁</div>
+    <div class="animal" style="right: 15%; bottom: 120px; animation-delay: 1s;">🐘</div>
+    <div class="butterfly" style="left: 20%; top: 30%;">🦋</div>
+    <div class="butterfly" style="right: 25%; top: 40%; animation-delay: 2s;">🦋</div>
+  </div>
+
+  <div class="container">
+    <div class="game-box">
+      
+      <!-- HOME SCREEN -->
+      <div id="homeScreen" class="screen active">
+        <h1>🌴 JUNGLE SAFARI 🦁</h1>
+        <p class="subtitle">🎓 Ultimate Knowledge Adventure for Kids! 🎓</p>
+        
+        <div class="form-group">
+          <label>👤 Your Explorer Name</label>
+          <input type="text" id="playerName" placeholder="Enter your name here!" value="Junior Explorer">
+        </div>
+
+        <div class="form-group">
+          <label>🎭 Choose Your Safari Guide</label>
+          <select id="avatarSelect">
+            <option value="🧒">🧒 Boy Explorer</option>
+            <option value="👧">👧 Girl Explorer</option>
+            <option value="🦁">🦁 Brave Lion</option>
+            <option value="🐵">🐵 Clever Monkey</option>
+            <option value="🐯">🐯 Smart Tiger</option>
+            <option value="🦜">🦜 Wise Parrot</option>
+            <option value="🐘">🐘 Strong Elephant</option>
+            <option value="🦒">🦒 Tall Giraffe</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>📚 Knowledge Categories</label>
+          <select id="categorySelect">
+            <option value="all">🌈 All Topics (Mixed)</option>
+            <option value="math">🔢 Math Magic</option>
+            <option value="science">🔬 Science Wonders</option>
+            <option value="english">📖 English & Words</option>
+            <option value="history">🏛️ History & Geography</option>
+            <option value="nature">🌿 Nature & Animals</option>
+            <option value="general">🎯 General Knowledge</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>⚡ Difficulty Level</label>
+          <select id="difficultySelect">
+            <option value="easy">🟢 Easy (Ages 5-7)</option>
+            <option value="medium" selected>🟡 Medium (Ages 8-10)</option>
+            <option value="hard">🔴 Hard (Ages 11+)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>❓ Number of Questions</label>
+          <select id="questionCount">
+            <option value="5">5 Questions (Quick)</option>
+            <option value="10" selected>10 Questions (Standard)</option>
+            <option value="15">15 Questions (Challenge)</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary" onclick="startAdventure()">🚀 START ADVENTURE!</button>
+        <button class="btn btn-secondary" onclick="showHistory()">🏆 View Hall of Fame</button>
+        <button class="btn btn-success" onclick="showSettings()">⚙️ Settings</button>
+      </div>
+
+      <!-- GAME SCREEN -->
+      <div id="gameScreen" class="screen">
+        <div class="avatar-display">
+          <div class="avatar-big" id="gameAvatar">🧒</div>
+        </div>
+
+        <div class="stats-bar">
+          <div class="stat-item">
+            <span class="stat-value" id="livesDisplay">❤️❤️❤️</span>
+            <span class="stat-label">Lives</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" id="scoreDisplay">0</span>
+            <span class="stat-label">Score</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" id="questionCounter">1/10</span>
+            <span class="stat-label">Progress</span>
+          </div>
+        </div>
+
+        <div class="progress-jungle">
+          <div class="progress-fill" id="progressBar"></div>
+        </div>
+
+        <div class="timer-big">
+          <div class="timer-circle" id="timerDisplay">15</div>
+        </div>
+
+        <div class="question-panel">
+          <div class="question-category" id="questionCategory">Math</div>
+          <div class="question-text" id="questionText">What is 5 + 3?</div>
+        </div>
+
+        <div class="options-grid" id="optionsContainer"></div>
+
+        <div id="messageContainer"></div>
+
+        <button class="btn btn-secondary" onclick="exitGame()">🏠 Exit Safari</button>
+      </div>
+
+      <!-- FINAL SCREEN -->
+      <div id="finalScreen" class="screen">
+        <div class="final-screen">
+          <div class="final-emoji" id="finalEmoji">🏆</div>
+          <h1 id="finalTitle">ADVENTURE COMPLETE!</h1>
+          <div class="final-score" id="finalScore">10/10</div>
+          <div class="final-message" id="finalMessage">You're a Knowledge Champion!</div>
+          <div class="avatar-display">
+            <div class="avatar-big" id="finalAvatar">🧒</div>
+          </div>
+          <button class="btn btn-primary" onclick="showHome()">🏠 Back to Home</button>
+          <button class="btn btn-success" onclick="playAgain()">🔄 Play Again</button>
+        </div>
+      </div>
+
+      <!-- HISTORY SCREEN -->
+      <div id="historyScreen" class="screen">
+        <h1>🏆 HALL OF FAME 🏆</h1>
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Explorer</th>
+              <th>Category</th>
+              <th>Level</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+        <button class="btn btn-primary" onclick="showHome()">🏠 Back to Home</button>
+      </div>
+
+      <!-- SETTINGS SCREEN -->
+      <div id="settingsScreen" class="screen">
+        <h1>⚙️ SETTINGS ⚙️</h1>
+        
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="musicToggle" checked style="width: auto; display: inline; margin-right: 10px;" onchange="toggleMusic()">
+            🎵 Background Music
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="soundToggle" checked style="width: auto; display: inline; margin-right: 10px;">
+            🔊 Sound Effects
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="animationsToggle" checked style="width: auto; display: inline; margin-right: 10px;">
+            ✨ Animations
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>⏱️ Time per Question</label>
+          <select id="timeLimit">
+            <option value="10">10 seconds</option>
+            <option value="15" selected>15 seconds</option>
+            <option value="20">20 seconds</option>
+            <option value="30">30 seconds</option>
+          </select>
+        </div>
+
+        <button class="btn btn-secondary" onclick="clearHistory()">🗑️ Clear Hall of Fame</button>
+        <button class="btn btn-primary" onclick="showHome()">🏠 Back to Home</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="stars" id="stars"></div>
+
+  <script>
+    // ===== QUESTION DATABASE =====
+    const questionDatabase = {
+      math: {
+        easy: [
+          { q: "What is 5 + 3?", options: ["8", "7", "9", "6"], answer: "8" },
+          { q: "What is 10 - 4?", options: ["6", "5", "7", "4"], answer: "6" },
+          { q: "What is 2 × 3?", options: ["6", "5", "7", "8"], answer: "6" },
+          { q: "What is 8 ÷ 2?", options: ["4", "3", "5", "6"], answer: "4" },
+          { q: "What is 7 + 2?", options: ["9", "8", "10", "7"], answer: "9" },
+          { q: "How many sides does a triangle have?", options: ["3", "4", "5", "6"], answer: "3" },
+          { q: "What is 6 + 6?", options: ["12", "11", "13", "10"], answer: "12" },
+          { q: "What is 15 - 5?", options: ["10", "9", "11", "8"], answer: "10" },
+          { q: "What is 4 + 4?", options: ["8", "7", "9", "6"], answer: "8" },
+          { q: "What is 9 - 3?", options: ["6", "5", "7", "4"], answer: "6" },
+          { q: "What is 3 × 2?", options: ["6", "5", "7", "8"], answer: "6" },
+          { q: "What is 12 ÷ 3?", options: ["4", "3", "5", "6"], answer: "4" },
+          { q: "What is 8 + 5?", options: ["13", "12", "14", "11"], answer: "13" },
+          { q: "What is 20 - 8?", options: ["12", "11", "13", "10"], answer: "12" },
+          { q: "How many sides does a square have?", options: ["4", "3", "5", "6"], answer: "4" }
+        ],
+        medium: [
+          { q: "What is 12 × 5?", options: ["60", "50", "70", "55"], answer: "60" },
+          { q: "What is 144 ÷ 12?", options: ["12", "10", "14", "16"], answer: "12" },
+          { q: "What is 25 + 37?", options: ["62", "60", "65", "58"], answer: "62" },
+          { q: "What is 100 - 47?", options: ["53", "52", "54", "51"], answer: "53" },
+          { q: "How many degrees in a right angle?", options: ["90", "180", "45", "360"], answer: "90" },
+          { q: "What is 7 × 8?", options: ["56", "54", "58", "52"], answer: "56" },
+          { q: "What is 9 × 9?", options: ["81", "72", "90", "63"], answer: "81" },
+          { q: "What is 64 ÷ 8?", options: ["8", "7", "9", "6"], answer: "8" },
+          { q: "What is 45 + 38?", options: ["83", "82", "84", "81"], answer: "83" },
+          { q: "What is 200 - 87?", options: ["113", "112", "114", "111"], answer: "113" },
+          { q: "What is 11 × 6?", options: ["66", "65", "67", "64"], answer: "66" },
+          { q: "What is 96 ÷ 12?", options: ["8", "7", "9", "6"], answer: "8" },
+          { q: "What is 55 + 47?", options: ["102", "101", "103", "100"], answer: "102" },
+          { q: "What is 150 - 68?", options: ["82", "81", "83", "80"], answer: "82" },
+          { q: "How many degrees in a full circle?", options: ["360", "180", "90", "270"], answer: "360" }
+        ],
+        hard: [
+          { q: "What is 15² (15 squared)?", options: ["225", "215", "235", "205"], answer: "225" },
+          { q: "What is 144 ÷ 12 × 5?", options: ["60", "50", "70", "40"], answer: "60" },
+          { q: "What is the square root of 64?", options: ["8", "6", "10", "7"], answer: "8" },
+          { q: "What is 25% of 200?", options: ["50", "40", "60", "45"], answer: "50" },
+          { q: "What is 12² (12 squared)?", options: ["144", "134", "154", "124"], answer: "144" },
+          { q: "What is 180 ÷ 15 × 3?", options: ["36", "35", "37", "34"], answer: "36" },
+          { q: "What is the square root of 100?", options: ["10", "9", "11", "8"], answer: "10" },
+          { q: "What is 20% of 150?", options: ["30", "25", "35", "28"], answer: "30" },
+          { q: "What is 10³ (10 cubed)?", options: ["1000", "900", "1100", "800"], answer: "1000" },
+          { q: "What is 256 ÷ 16?", options: ["16", "15", "17", "14"], answer: "16" },
+          { q: "What is 75% of 80?", options: ["60", "55", "65", "58"], answer: "60" },
+          { q: "What is the square root of 144?", options: ["12", "11", "13", "10"], answer: "12" },
+          { q: "What is 18 × 7?", options: ["126", "124", "128", "122"], answer: "126" },
+          { q: "What is 324 ÷ 18?", options: ["18", "17", "19", "16"], answer: "18" },
+          { q: "What is 50% of 250?", options: ["125", "120", "130", "115"], answer: "125" }
+        ]
+      },
+      science: {
+        easy: [
+          { q: "What do bees make?", options: ["Honey", "Milk", "Butter", "Cheese"], answer: "Honey" },
+          { q: "What is the color of the sky on a clear day?", options: ["Blue", "Green", "Red", "Yellow"], answer: "Blue" },
+          { q: "How many legs does a spider have?", options: ["8", "6", "10", "4"], answer: "8" },
+          { q: "What do plants need to grow?", options: ["Sunlight & Water", "Only Darkness", "Only Soil", "Only Air"], answer: "Sunlight & Water" },
+          { q: "What is the largest planet in our solar system?", options: ["Jupiter", "Mars", "Earth", "Venus"], answer: "Jupiter" },
+          { q: "What do caterpillars turn into?", options: ["Butterflies", "Birds", "Bees", "Dragonflies"], answer: "Butterflies" },
+          { q: "How many legs does an insect have?", options: ["6", "8", "4", "10"], answer: "6" },
+          { q: "What is water made of?", options: ["Hydrogen & Oxygen", "Only Hydrogen", "Only Oxygen", "Carbon & Oxygen"], answer: "Hydrogen & Oxygen" },
+          { q: "What do we breathe in to stay alive?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Helium"], answer: "Oxygen" },
+          { q: "Which is the hottest planet?", options: ["Venus", "Mercury", "Mars", "Jupiter"], answer: "Venus" },
+          { q: "What is the Sun?", options: ["A Star", "A Planet", "A Moon", "An Asteroid"], answer: "A Star" },
+          { q: "What do fish use to breathe underwater?", options: ["Gills", "Lungs", "Skin", "Nose"], answer: "Gills" },
+          { q: "How many wings does a bee have?", options: ["4", "2", "6", "8"], answer: "4" },
+          { q: "What is the Earth's natural satellite?", options: ["Moon", "Sun", "Mars", "Venus"], answer: "Moon" },
+          { q: "What part of the plant grows underground?", options: ["Roots", "Leaves", "Flowers", "Stem"], answer: "Roots" }
+        ],
+        medium: [
+          { q: "What is the process plants use to make food?", options: ["Photosynthesis", "Respiration", "Digestion", "Evaporation"], answer: "Photosynthesis" },
+          { q: "What is the closest planet to the Sun?", options: ["Mercury", "Venus", "Earth", "Mars"], answer: "Mercury" },
+          { q: "What is H2O commonly known as?", options: ["Water", "Oxygen", "Hydrogen", "Salt"], answer: "Water" },
+          { q: "How many bones does an adult human have?", options: ["206", "195", "215", "180"], answer: "206" },
+          { q: "What force keeps us on the ground?", options: ["Gravity", "Magnetism", "Friction", "Pressure"], answer: "Gravity" },
+          { q: "What is the hardest natural substance?", options: ["Diamond", "Gold", "Iron", "Silver"], answer: "Diamond" },
+          { q: "What gas do we exhale?", options: ["Carbon Dioxide", "Oxygen", "Nitrogen", "Hydrogen"], answer: "Carbon Dioxide" },
+          { q: "How many chambers does a human heart have?", options: ["4", "3", "5", "2"], answer: "4" },
+          { q: "What is the center of an atom called?", options: ["Nucleus", "Electron", "Proton", "Neutron"], answer: "Nucleus" },
+          { q: "What type of animal is a dolphin?", options: ["Mammal", "Fish", "Reptile", "Amphibian"], answer: "Mammal" },
+          { q: "What is the boiling point of water?", options: ["100°C", "0°C", "50°C", "200°C"], answer: "100°C" },
+          { q: "What is the largest organ in the human body?", options: ["Skin", "Heart", "Liver", "Brain"], answer: "Skin" },
+          { q: "How many planets are in our solar system?", options: ["8", "7", "9", "10"], answer: "8" },
+          { q: "What is the chemical symbol for gold?", options: ["Au", "Ag", "Fe", "Cu"], answer: "Au" },
+          { q: "What type of energy does the Sun produce?", options: ["Solar Energy", "Wind Energy", "Tidal Energy", "Nuclear Energy"], answer: "Solar Energy" }
+        ],
+        hard: [
+          { q: "What is the smallest unit of life?", options: ["Cell", "Atom", "Molecule", "Organ"], answer: "Cell" },
+          { q: "What is the speed of light?", options: ["300,000 km/s", "150,000 km/s", "500,000 km/s", "100,000 km/s"], answer: "300,000 km/s" },
+          { q: "What gas do plants absorb from the air?", options: ["Carbon Dioxide", "Oxygen", "Nitrogen", "Hydrogen"], answer: "Carbon Dioxide" },
+          { q: "What is the atomic number of carbon?", options: ["6", "12", "8", "14"], answer: "6" },
+          { q: "What is the powerhouse of the cell?", options: ["Mitochondria", "Nucleus", "Ribosome", "Golgi Body"], answer: "Mitochondria" },
+          { q: "What is the chemical formula for salt?", options: ["NaCl", "H2O", "CO2", "O2"], answer: "NaCl" },
+          { q: "How long does light from the Sun take to reach Earth?", options: ["8 minutes", "1 hour", "1 day", "1 second"], answer: "8 minutes" },
+          { q: "What is the largest bone in the human body?", options: ["Femur", "Tibia", "Humerus", "Spine"], answer: "Femur" },
+          { q: "What is the pH of pure water?", options: ["7", "0", "14", "10"], answer: "7" },
+          { q: "What planet is known as the Red Planet?", options: ["Mars", "Venus", "Jupiter", "Saturn"], answer: "Mars" },
+          { q: "What is the most abundant gas in Earth's atmosphere?", options: ["Nitrogen", "Oxygen", "Carbon Dioxide", "Argon"], answer: "Nitrogen" },
+          { q: "What is the study of weather called?", options: ["Meteorology", "Geology", "Biology", "Astronomy"], answer: "Meteorology" },
+          { q: "How many teeth does an adult human have?", options: ["32", "28", "30", "34"], answer: "32" },
+          { q: "What is the smallest planet in our solar system?", options: ["Mercury", "Mars", "Venus", "Pluto"], answer: "Mercury" },
+          { q: "What is the chemical symbol for iron?", options: ["Fe", "Ir", "In", "I"], answer: "Fe" }
+        ]
+      },
+      english: {
+        easy: [
+          { q: "What is the opposite of 'hot'?", options: ["Cold", "Warm", "Cool", "Freezing"], answer: "Cold" },
+          { q: "How many vowels are in the English alphabet?", options: ["5", "4", "6", "7"], answer: "5" },
+          { q: "What is a baby dog called?", options: ["Puppy", "Kitten", "Calf", "Chick"], answer: "Puppy" },
+          { q: "Which word is a noun: run, happy, cat, quickly?", options: ["Cat", "Run", "Happy", "Quickly"], answer: "Cat" },
+          { q: "What is the plural of 'child'?", options: ["Children", "Childs", "Childes", "Childer"], answer: "Children" },
+          { q: "What is the opposite of 'big'?", options: ["Small", "Tiny", "Little", "Short"], answer: "Small" },
+          { q: "How many letters are in the English alphabet?", options: ["26", "24", "28", "25"], answer: "26" },
+          { q: "What is a baby cat called?", options: ["Kitten", "Puppy", "Calf", "Cub"], answer: "Kitten" },
+          { q: "Which word rhymes with 'cat'?", options: ["Hat", "Dog", "Run", "Car"], answer: "Hat" },
+          { q: "What is the plural of 'mouse'?", options: ["Mice", "Mouses", "Meese", "Mices"], answer: "Mice" },
+          { q: "What is the opposite of 'happy'?", options: ["Sad", "Angry", "Mad", "Upset"], answer: "Sad" },
+          { q: "Which word starts with the letter 'B'?", options: ["Ball", "Cat", "Dog", "Apple"], answer: "Ball" },
+          { q: "What is the plural of 'tooth'?", options: ["Teeth", "Tooths", "Toothes", "Teethes"], answer: "Teeth" },
+          { q: "What is the opposite of 'up'?", options: ["Down", "Left", "Right", "Back"], answer: "Down" },
+          { q: "Which word is a verb: jump, blue, happy, tree?", options: ["Jump", "Blue", "Happy", "Tree"], answer: "Jump" }
+        ],
+        medium: [
+          { q: "What is a synonym for 'happy'?", options: ["Joyful", "Sad", "Angry", "Tired"], answer: "Joyful" },
+          { q: "Which is spelled correctly?", options: ["Beautiful", "Beatiful", "Beautifull", "Beutiful"], answer: "Beautiful" },
+          { q: "What type of word is 'quickly'?", options: ["Adverb", "Noun", "Verb", "Adjective"], answer: "Adverb" },
+          { q: "What is an antonym for 'difficult'?", options: ["Easy", "Hard", "Tough", "Complex"], answer: "Easy" },
+          { q: "What is a synonym for 'big'?", options: ["Large", "Small", "Tiny", "Little"], answer: "Large" },
+          { q: "Which is spelled correctly?", options: ["Necessary", "Neccessary", "Neccesary", "Necessery"], answer: "Necessary" },
+          { q: "What type of word describes a noun?", options: ["Adjective", "Adverb", "Verb", "Pronoun"], answer: "Adjective" },
+          { q: "What is the past tense of 'go'?", options: ["Went", "Goes", "Going", "Gone"], answer: "Went" },
+          { q: "What is a synonym for 'smart'?", options: ["Intelligent", "Dumb", "Slow", "Lazy"], answer: "Intelligent" },
+          { q: "Which is spelled correctly?", options: ["Receive", "Recieve", "Receve", "Receeve"], answer: "Receive" },
+          { q: "What is the plural of 'knife'?", options: ["Knives", "Knifes", "Knive", "Knifves"], answer: "Knives" },
+          { q: "What is an antonym for 'old'?", options: ["Young", "Ancient", "Aged", "Elder"], answer: "Young" },
+          { q: "What type of word replaces a noun?", options: ["Pronoun", "Adjective", "Verb", "Adverb"], answer: "Pronoun" },
+          { q: "What is the past tense of 'eat'?", options: ["Ate", "Eated", "Eaten", "Eating"], answer: "Ate" },
+          { q: "What is a synonym for 'small'?", options: ["Tiny", "Huge", "Large", "Big"], answer: "Tiny" }
+        ],
+        hard: [
+          { q: "What literary device compares two things using 'like' or 'as'?", options: ["Simile", "Metaphor", "Alliteration", "Hyperbole"], answer: "Simile" },
+          { q: "What is the past tense of 'swim'?", options: ["Swam", "Swimmed", "Swum", "Swimming"], answer: "Swam" },
+          { q: "What is a metaphor?", options: ["Direct comparison", "Using like/as", "Exaggeration", "Sound repetition"], answer: "Direct comparison" },
+          { q: "What is the superlative form of 'good'?", options: ["Best", "Better", "Gooder", "Goodest"], answer: "Best" },
+          { q: "What is alliteration?", options: ["Repeated sounds", "Comparison", "Exaggeration", "Rhyming"], answer: "Repeated sounds" },
+          { q: "What is the past participle of 'write'?", options: ["Written", "Wrote", "Writing", "Writed"], answer: "Written" },
+          { q: "What is personification?", options: ["Giving human traits to objects", "Comparison", "Exaggeration", "Sound pattern"], answer: "Giving human traits to objects" },
+          { q: "What is the comparative form of 'bad'?", options: ["Worse", "Badder", "More bad", "Worst"], answer: "Worse" },
+          { q: "What is onomatopoeia?", options: ["Words that sound like what they mean", "Comparison", "Exaggeration", "Repetition"], answer: "Words that sound like what they mean" },
+          { q: "What is the past tense of 'begin'?", options: ["Began", "Begun", "Beginned", "Beginning"], answer: "Began" },
+          { q: "What is hyperbole?", options: ["Exaggeration", "Comparison", "Sound repetition", "Rhyming"], answer: "Exaggeration" },
+          { q: "What is the plural of 'criterion'?", options: ["Criteria", "Criterions", "Criterias", "Criteron"], answer: "Criteria" },
+          { q: "What is an oxymoron?", options: ["Contradictory terms", "Comparison", "Exaggeration", "Repetition"], answer: "Contradictory terms" },
+          { q: "What is the past tense of 'rise'?", options: ["Rose", "Risen", "Rised", "Rising"], answer: "Rose" },
+          { q: "What is irony?", options: ["Opposite of expectation", "Comparison", "Exaggeration", "Sound pattern"], answer: "Opposite of expectation" }
+        ]
+      },
+      history: {
+        easy: [
+          { q: "What country is famous for the Great Wall?", options: ["China", "Japan", "India", "Korea"], answer: "China" },
+          { q: "Who was the first president of the USA?", options: ["George Washington", "Abraham Lincoln", "Thomas Jefferson", "John Adams"], answer: "George Washington" },
+          { q: "What is the capital of France?", options: ["Paris", "London", "Rome", "Berlin"], answer: "Paris" },
+          { q: "How many continents are there?", options: ["7", "5", "6", "8"], answer: "7" },
+          { q: "What is the capital of Japan?", options: ["Tokyo", "Beijing", "Seoul", "Bangkok"], answer: "Tokyo" },
+          { q: "What is the capital of Italy?", options: ["Rome", "Milan", "Venice", "Florence"], answer: "Rome" },
+          { q: "Who discovered America?", options: ["Christopher Columbus", "Marco Polo", "Ferdinand Magellan", "Vasco da Gama"], answer: "Christopher Columbus" },
+          { q: "What is the capital of Egypt?", options: ["Cairo", "Alexandria", "Giza", "Luxor"], answer: "Cairo" },
+          { q: "What is the capital of the UK?", options: ["London", "Manchester", "Edinburgh", "Dublin"], answer: "London" },
+          { q: "What country is the Eiffel Tower in?", options: ["France", "Italy", "Spain", "Germany"], answer: "France" },
+          { q: "What is the capital of Spain?", options: ["Madrid", "Barcelona", "Seville", "Valencia"], answer: "Madrid" },
+          { q: "What country is famous for pizza?", options: ["Italy", "France", "Spain", "Greece"], answer: "Italy" },
+          { q: "What is the capital of Canada?", options: ["Ottawa", "Toronto", "Montreal", "Vancouver"], answer: "Ottawa" },
+          { q: "What country has the most people?", options: ["China", "India", "USA", "Indonesia"], answer: "China" },
+          { q: "What is the capital of Australia?", options: ["Canberra", "Sydney", "Melbourne", "Brisbane"], answer: "Canberra" }
+        ],
+        medium: [
+          { q: "What year did World War II end?", options: ["1945", "1944", "1946", "1943"], answer: "1945" },
+          { q: "Who wrote 'Romeo and Juliet'?", options: ["William Shakespeare", "Charles Dickens", "Mark Twain", "Jane Austen"], answer: "William Shakespeare" },
+          { q: "What is the largest ocean on Earth?", options: ["Pacific Ocean", "Atlantic Ocean", "Indian Ocean", "Arctic Ocean"], answer: "Pacific Ocean" },
+          { q: "Which ancient wonder is still standing today?", options: ["Great Pyramid of Giza", "Hanging Gardens", "Colossus of Rhodes", "Lighthouse of Alexandria"], answer: "Great Pyramid of Giza" },
+          { q: "What year did World War I start?", options: ["1914", "1915", "1913", "1916"], answer: "1914" },
+          { q: "Who painted the Mona Lisa?", options: ["Leonardo da Vinci", "Michelangelo", "Raphael", "Donatello"], answer: "Leonardo da Vinci" },
+          { q: "What is the longest river in the world?", options: ["Nile", "Amazon", "Yangtze", "Mississippi"], answer: "Nile" },
+          { q: "What year did the Titanic sink?", options: ["1912", "1911", "1913", "1910"], answer: "1912" },
+          { q: "Who was the first woman to fly solo across the Atlantic?", options: ["Amelia Earhart", "Bessie Coleman", "Harriet Quimby", "Jacqueline Cochran"], answer: "Amelia Earhart" },
+          { q: "What is the tallest mountain in the world?", options: ["Mount Everest", "K2", "Kangchenjunga", "Lhotse"], answer: "Mount Everest" },
+          { q: "What year did the Berlin Wall fall?", options: ["1989", "1988", "1990", "1987"], answer: "1989" },
+          { q: "Who invented the telephone?", options: ["Alexander Graham Bell", "Thomas Edison", "Nikola Tesla", "Benjamin Franklin"], answer: "Alexander Graham Bell" },
+          { q: "What is the smallest country in the world?", options: ["Vatican City", "Monaco", "San Marino", "Liechtenstein"], answer: "Vatican City" },
+          { q: "What year did humans first land on the Moon?", options: ["1969", "1968", "1970", "1967"], answer: "1969" },
+          { q: "Who was the ancient Egyptian queen famous for her beauty?", options: ["Cleopatra", "Nefertiti", "Hatshepsut", "Nefertari"], answer: "Cleopatra" }
+        ],
+        hard: [
+          { q: "In what year did Columbus reach America?", options: ["1492", "1482", "1502", "1512"], answer: "1492" },
+          { q: "Who was the first person to walk on the moon?", options: ["Neil Armstrong", "Buzz Aldrin", "Yuri Gagarin", "John Glenn"], answer: "Neil Armstrong" },
+          { q: "What year did the Roman Empire fall?", options: ["476 AD", "410 AD", "500 AD", "450 AD"], answer: "476 AD" },
+          { q: "Who was the first emperor of Rome?", options: ["Augustus", "Julius Caesar", "Nero", "Caligula"], answer: "Augustus" },
+          { q: "What year did the French Revolution begin?", options: ["1789", "1799", "1779", "1769"], answer: "1789" },
+          { q: "Who was the longest-reigning British monarch?", options: ["Queen Elizabeth II", "Queen Victoria", "King George III", "King Henry VIII"], answer: "Queen Elizabeth II" },
+          { q: "What year did the American Civil War end?", options: ["1865", "1864", "1866", "1863"], answer: "1865" },
+          { q: "Who was the first Holy Roman Emperor?", options: ["Charlemagne", "Otto I", "Frederick Barbarossa", "Charles V"], answer: "Charlemagne" },
+          { q: "What year was the United Nations founded?", options: ["1945", "1944", "1946", "1943"], answer: "1945" },
+          { q: "Who led India to independence?", options: ["Mahatma Gandhi", "Jawaharlal Nehru", "Subhas Chandra Bose", "Sardar Patel"], answer: "Mahatma Gandhi" },
+          { q: "What year did the Soviet Union dissolve?", options: ["1991", "1990", "1992", "1989"], answer: "1991" },
+          { q: "Who was the first female Prime Minister of the UK?", options: ["Margaret Thatcher", "Theresa May", "Indira Gandhi", "Golda Meir"], answer: "Margaret Thatcher" },
+          { q: "What year was the Magna Carta signed?", options: ["1215", "1225", "1205", "1235"], answer: "1215" },
+          { q: "Who was the founder of the Mongol Empire?", options: ["Genghis Khan", "Kublai Khan", "Attila the Hun", "Tamerlane"], answer: "Genghis Khan" },
+          { q: "What year did the Great Depression begin?", options: ["1929", "1928", "1930", "1927"], answer: "1929" }
+        ]
+      },
+      nature: {
+        easy: [
+          { q: "What is the tallest animal in the world?", options: ["Giraffe", "Elephant", "Lion", "Bear"], answer: "Giraffe" },
+          { q: "What do cows give us?", options: ["Milk", "Honey", "Eggs", "Wool"], answer: "Milk" },
+          { q: "What color are emeralds?", options: ["Green", "Blue", "Red", "Yellow"], answer: "Green" },
+          { q: "How many seasons are there in a year?", options: ["4", "3", "5", "2"], answer: "4" },
+          { q: "What is the largest land animal?", options: ["Elephant", "Rhino", "Hippo", "Giraffe"], answer: "Elephant" },
+          { q: "What do chickens lay?", options: ["Eggs", "Milk", "Honey", "Wool"], answer: "Eggs" },
+          { q: "What color are rubies?", options: ["Red", "Green", "Blue", "Yellow"], answer: "Red" },
+          { q: "How many legs does a cat have?", options: ["4", "2", "6", "8"], answer: "4" },
+          { q: "What is the king of the jungle?", options: ["Lion", "Tiger", "Bear", "Elephant"], answer: "Lion" },
+          { q: "What do sheep give us?", options: ["Wool", "Milk", "Eggs", "Honey"], answer: "Wool" },
+          { q: "What color are sapphires?", options: ["Blue", "Green", "Red", "Yellow"], answer: "Blue" },
+          { q: "How many legs does a bird have?", options: ["2", "4", "6", "8"], answer: "2" },
+          { q: "What is the fastest bird?", options: ["Peregrine Falcon", "Eagle", "Hawk", "Owl"], answer: "Peregrine Falcon" },
+          { q: "What do bees collect from flowers?", options: ["Nectar", "Water", "Seeds", "Leaves"], answer: "Nectar" },
+          { q: "What is the largest bird that cannot fly?", options: ["Ostrich", "Penguin", "Emu", "Cassowary"], answer: "Ostrich" }
+        ],
+        medium: [
+          { q: "What is the fastest land animal?", options: ["Cheetah", "Lion", "Horse", "Gazelle"], answer: "Cheetah" },
+          { q: "How many hearts does an octopus have?", options: ["3", "1", "2", "4"], answer: "3" },
+          { q: "What is a group of lions called?", options: ["Pride", "Pack", "Herd", "Flock"], answer: "Pride" },
+          { q: "What do pandas primarily eat?", options: ["Bamboo", "Fish", "Insects", "Berries"], answer: "Bamboo" },
+          { q: "What is the slowest animal in the world?", options: ["Sloth", "Turtle", "Snail", "Koala"], answer: "Sloth" },
+          { q: "How many humps does an Arabian camel have?", options: ["1", "2", "3", "0"], answer: "1" },
+          { q: "What is a group of wolves called?", options: ["Pack", "Pride", "Herd", "Flock"], answer: "Pack" },
+          { q: "What do koalas eat?", options: ["Eucalyptus leaves", "Bamboo", "Fruit", "Insects"], answer: "Eucalyptus leaves" },
+          { q: "What is the largest species of bear?", options: ["Polar Bear", "Grizzly Bear", "Black Bear", "Panda Bear"], answer: "Polar Bear" },
+          { q: "How many legs does a lobster have?", options: ["10", "8", "6", "12"], answer: "10" },
+          { q: "What is a group of fish called?", options: ["School", "Pack", "Pride", "Herd"], answer: "School" },
+          { q: "What do monarch butterflies migrate to?", options: ["Mexico", "Canada", "Alaska", "Florida"], answer: "Mexico" },
+          { q: "What is the largest species of penguin?", options: ["Emperor Penguin", "King Penguin", "Gentoo Penguin", "Chinstrap Penguin"], answer: "Emperor Penguin" },
+          { q: "How many chambers does a bird's heart have?", options: ["4", "3", "2", "5"], answer: "4" },
+          { q: "What is a group of elephants called?", options: ["Herd", "Pack", "Pride", "Flock"], answer: "Herd" }
+        ],
+        hard: [
+          { q: "What is the largest living species of lizard?", options: ["Komodo Dragon", "Iguana", "Monitor Lizard", "Crocodile"], answer: "Komodo Dragon" },
+          { q: "How long is an elephant pregnant?", options: ["22 months", "12 months", "18 months", "9 months"], answer: "22 months" },
+          { q: "What is the only mammal that can fly?", options: ["Bat", "Flying Squirrel", "Sugar Glider", "Flying Lemur"], answer: "Bat" },
+          { q: "What is the largest species of shark?", options: ["Whale Shark", "Great White Shark", "Tiger Shark", "Hammerhead Shark"], answer: "Whale Shark" },
+          { q: "How many bones does a shark have?", options: ["0", "100", "200", "50"], answer: "0" },
+          { q: "What is the only venomous primate?", options: ["Slow Loris", "Spider Monkey", "Lemur", "Tarsier"], answer: "Slow Loris" },
+          { q: "What is the gestation period of a kangaroo?", options: ["33 days", "60 days", "90 days", "120 days"], answer: "33 days" },
+          { q: "What is the largest species of deer?", options: ["Moose", "Elk", "Red Deer", "Reindeer"], answer: "Moose" },
+          { q: "How many eyes does a bee have?", options: ["5", "2", "4", "6"], answer: "5" },
+          { q: "What is the only bird that can fly backwards?", options: ["Hummingbird", "Kingfisher", "Woodpecker", "Swift"], answer: "Hummingbird" },
+          { q: "What is the loudest animal on Earth?", options: ["Blue Whale", "Howler Monkey", "Lion", "Elephant"], answer: "Blue Whale" },
+          { q: "How many teeth does an adult crocodile have?", options: ["60-80", "30-40", "100-120", "20-30"], answer: "60-80" },
+          { q: "What is the smallest mammal in the world?", options: ["Bumblebee Bat", "Pygmy Shrew", "Mouse Lemur", "Pygmy Marmoset"], answer: "Bumblebee Bat" },
+          { q: "How many years can a giant tortoise live?", options: ["150+", "50-70", "80-100", "200+"], answer: "150+" },
+          { q: "What is the fastest marine animal?", options: ["Sailfish", "Marlin", "Tuna", "Swordfish"], answer: "Sailfish" }
+        ]
+      },
+      general: {
+        easy: [
+          { q: "How many days are in a week?", options: ["7", "5", "6", "8"], answer: "7" },
+          { q: "What color do you get when you mix red and yellow?", options: ["Orange", "Green", "Purple", "Brown"], answer: "Orange" },
+          { q: "What do you use to write on a blackboard?", options: ["Chalk", "Pen", "Pencil", "Crayon"], answer: "Chalk" },
+          { q: "How many months are in a year?", options: ["12", "10", "11", "13"], answer: "12" },
+          { q: "What color do you get when you mix blue and yellow?", options: ["Green", "Orange", "Purple", "Brown"], answer: "Green" },
+          { q: "How many hours are in a day?", options: ["24", "20", "12", "30"], answer: "24" },
+          { q: "What shape has 3 sides?", options: ["Triangle", "Square", "Circle", "Rectangle"], answer: "Triangle" },
+          { q: "What do you use to cut paper?", options: ["Scissors", "Knife", "Saw", "Axe"], answer: "Scissors" },
+          { q: "How many fingers do humans have?", options: ["10", "8", "12", "20"], answer: "10" },
+          { q: "What do we use to see?", options: ["Eyes", "Ears", "Nose", "Mouth"], answer: "Eyes" },
+          { q: "What color do you get when you mix red and blue?", options: ["Purple", "Orange", "Green", "Brown"], answer: "Purple" },
+          { q: "How many sides does a square have?", options: ["4", "3", "5", "6"], answer: "4" },
+          { q: "What do we use to hear?", options: ["Ears", "Eyes", "Nose", "Mouth"], answer: "Ears" },
+          { q: "What is frozen water called?", options: ["Ice", "Steam", "Vapor", "Snow"], answer: "Ice" },
+          { q: "How many wheels does a bicycle have?", options: ["2", "3", "4", "1"], answer: "2" }
+        ],
+        medium: [
+          { q: "What is the main ingredient in bread?", options: ["Flour", "Sugar", "Salt", "Water"], answer: "Flour" },
+          { q: "What sport uses a shuttlecock?", options: ["Badminton", "Tennis", "Volleyball", "Table Tennis"], answer: "Badminton" },
+          { q: "Which musical instrument has 88 keys?", options: ["Piano", "Guitar", "Violin", "Flute"], answer: "Piano" },
+          { q: "What is the currency of Japan?", options: ["Yen", "Dollar", "Euro", "Peso"], answer: "Yen" },
+          { q: "What is the main ingredient in guacamole?", options: ["Avocado", "Tomato", "Onion", "Pepper"], answer: "Avocado" },
+          { q: "What sport uses a puck?", options: ["Hockey", "Football", "Basketball", "Baseball"], answer: "Hockey" },
+          { q: "Which instrument has strings?", options: ["Guitar", "Drum", "Flute", "Trumpet"], answer: "Guitar" },
+          { q: "What is the currency of the UK?", options: ["Pound", "Dollar", "Euro", "Yen"], answer: "Pound" },
+          { q: "What is the main ingredient in hummus?", options: ["Chickpeas", "Lentils", "Beans", "Peas"], answer: "Chickpeas" },
+          { q: "What sport uses a racket and a ball?", options: ["Tennis", "Soccer", "Basketball", "Baseball"], answer: "Tennis" },
+          { q: "Which instrument do you blow into?", options: ["Flute", "Guitar", "Piano", "Drum"], answer: "Flute" },
+          { q: "What is the currency of the USA?", options: ["Dollar", "Pound", "Euro", "Yen"], answer: "Dollar" },
+          { q: "What is the main ingredient in sushi?", options: ["Rice", "Bread", "Pasta", "Noodles"], answer: "Rice" },
+          { q: "What sport is played on ice?", options: ["Hockey", "Soccer", "Tennis", "Golf"], answer: "Hockey" },
+          { q: "Which instrument has keys and pedals?", options: ["Piano", "Guitar", "Violin", "Flute"], answer: "Piano" }
+        ],
+        hard: [
+          { q: "What is the hardest natural substance on Earth?", options: ["Diamond", "Gold", "Iron", "Ruby"], answer: "Diamond" },
+          { q: "How many strings does a standard guitar have?", options: ["6", "5", "7", "8"], answer: "6" },
+          { q: "What is the capital of Switzerland?", options: ["Bern", "Zurich", "Geneva", "Basel"], answer: "Bern" },
+          { q: "What is the currency of China?", options: ["Yuan", "Yen", "Won", "Rupee"], answer: "Yuan" },
+          { q: "What is the rarest blood type?", options: ["AB negative", "O negative", "A positive", "B negative"], answer: "AB negative" },
+          { q: "How many strings does a violin have?", options: ["4", "5", "6", "7"], answer: "4" },
+          { q: "What is the capital of Brazil?", options: ["Brasília", "Rio de Janeiro", "São Paulo", "Salvador"], answer: "Brasília" },
+          { q: "What is the currency of India?", options: ["Rupee", "Dollar", "Pound", "Euro"], answer: "Rupee" },
+          { q: "What is the most common blood type?", options: ["O positive", "A positive", "B positive", "AB positive"], answer: "O positive" },
+          { q: "How many strings does a bass guitar have?", options: ["4", "5", "6", "7"], answer: "4" },
+          { q: "What is the capital of Turkey?", options: ["Ankara", "Istanbul", "Izmir", "Antalya"], answer: "Ankara" },
+          { q: "What is the currency of Russia?", options: ["Ruble", "Dollar", "Euro", "Pound"], answer: "Ruble" },
+          { q: "What is the freezing point of water in Fahrenheit?", options: ["32°F", "0°F", "100°F", "212°F"], answer: "32°F" },
+          { q: "How many valves does a trumpet have?", options: ["3", "2", "4", "5"], answer: "3" },
+          { q: "What is the capital of South Africa?", options: ["Pretoria", "Cape Town", "Johannesburg", "Durban"], answer: "Pretoria" }
+        ]
+      }
+    };
+
+    // ===== GAME STATE =====
+    const gameState = {
+      currentQuestion: 0,
+      score: 0,
+      lives: 3,
+      questions: [],
+      timerInterval: null,
+      playerName: '',
+      avatar: '🧒',
+      category: 'all',
+      difficulty: 'medium',
+      timeLimit: 15,
+      totalQuestions: 10
+    };
+
+    // ===== SOUND EFFECTS =====
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const audioCtx = new AudioContext();
+
+    // Safari theme music state
+    let backgroundMusic = null;
+    let musicPlaying = false;
+
+    // Create background music using Web Audio API - Enhanced Safari Theme!
+    function createSafariMusic() {
+      if (backgroundMusic) return;
+      
+      // More adventurous safari melody with rhythm
+      const melody = [
+        // Main theme - upbeat and adventurous
+        { freq: 523, duration: 0.25 }, // C
+        { freq: 587, duration: 0.25 }, // D
+        { freq: 659, duration: 0.25 }, // E
+        { freq: 784, duration: 0.25 }, // G
+        { freq: 659, duration: 0.25 }, // E
+        { freq: 587, duration: 0.25 }, // D
+        { freq: 523, duration: 0.5 },  // C
+        { freq: 0, duration: 0.1 },    // Rest
+        
+        // Second phrase
+        { freq: 587, duration: 0.25 }, // D
+        { freq: 659, duration: 0.25 }, // E
+        { freq: 784, duration: 0.25 }, // G
+        { freq: 880, duration: 0.25 }, // A
+        { freq: 784, duration: 0.25 }, // G
+        { freq: 659, duration: 0.25 }, // E
+        { freq: 587, duration: 0.5 },  // D
+        { freq: 0, duration: 0.1 },    // Rest
+        
+        // Jungle call
+        { freq: 784, duration: 0.2 },  // G
+        { freq: 880, duration: 0.2 },  // A
+        { freq: 988, duration: 0.3 },  // B
+        { freq: 880, duration: 0.2 },  // A
+        { freq: 784, duration: 0.3 },  // G
+        { freq: 0, duration: 0.1 },    // Rest
+        
+        // Return home
+        { freq: 659, duration: 0.25 }, // E
+        { freq: 587, duration: 0.25 }, // D
+        { freq: 523, duration: 0.25 }, // C
+        { freq: 392, duration: 0.25 }, // G (lower)
+        { freq: 523, duration: 0.5 },  // C
+        { freq: 0, duration: 0.3 },    // Longer rest before loop
+      ];
+
+      let currentIndex = 0;
+      let timeoutId = null;
+
+      function playNextNote() {
+        if (!musicPlaying || !document.getElementById('musicToggle')?.checked) {
+          return;
+        }
+
+        const note = melody[currentIndex];
+        
+        // Skip if it's a rest (frequency 0)
+        if (note.freq > 0) {
+          const oscillator = audioCtx.createOscillator();
+          const gainNode = audioCtx.createGain();
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(audioCtx.destination);
+          
+          oscillator.frequency.value = note.freq;
+          oscillator.type = 'triangle'; // Warmer tone for safari feel
+          
+          gainNode.gain.setValueAtTime(0.12, audioCtx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + note.duration);
+          
+          oscillator.start(audioCtx.currentTime);
+          oscillator.stop(audioCtx.currentTime + note.duration);
+        }
+
+        currentIndex = (currentIndex + 1) % melody.length;
+        timeoutId = setTimeout(playNextNote, note.duration * 1000);
+      }
+
+      backgroundMusic = {
+        start: () => {
+          musicPlaying = true;
+          playNextNote();
+        },
+        stop: () => {
+          musicPlaying = false;
+          if (timeoutId) clearTimeout(timeoutId);
+        }
+      };
+    }
+
+    function toggleMusic() {
+      createSafariMusic();
+      const toggle = document.getElementById('musicToggle');
+      
+      if (toggle.checked) {
+        backgroundMusic.start();
+      } else {
+        backgroundMusic.stop();
+      }
+    }
+
+    function playTone(frequency, duration, type = 'sine') {
+      if (!document.getElementById('soundToggle').checked) return;
+      
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      
+      oscillator.frequency.value = frequency;
+      oscillator.type = type;
+      
+      gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+      
+      oscillator.start(audioCtx.currentTime);
+      oscillator.stop(audioCtx.currentTime + duration);
+    }
+
+    function playCorrectSound() {
+      playTone(523.25, 0.1);
+      setTimeout(() => playTone(659.25, 0.1), 100);
+      setTimeout(() => playTone(783.99, 0.2), 200);
+    }
+
+    function playWrongSound() {
+      playTone(200, 0.3, 'sawtooth');
+    }
+
+    function playClickSound() {
+      playTone(400, 0.05);
+    }
+
+    // ===== NAVIGATION =====
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    function showHome() {
+      showScreen('homeScreen');
+      playClickSound();
+    }
+
+    function showHistory() {
+      loadHistory();
+      showScreen('historyScreen');
+      playClickSound();
+    }
+
+    function showSettings() {
+      showScreen('settingsScreen');
+      playClickSound();
+    }
+
+    // ===== QUESTION GENERATION - FIXED VERSION =====
+    function generateQuestions() {
+      const category = gameState.category;
+      const difficulty = gameState.difficulty;
+      const count = gameState.totalQuestions;
+      const questions = [];
+      
+      const categories = category === 'all' 
+        ? Object.keys(questionDatabase)
+        : [category];
+      
+      const availableQuestions = [];
+      
+      // Collect all available questions
+      categories.forEach(cat => {
+        if (questionDatabase[cat] && questionDatabase[cat][difficulty]) {
+          questionDatabase[cat][difficulty].forEach(q => {
+            availableQuestions.push({
+              ...q,
+              category: cat
+            });
+          });
+        }
+      });
+      
+      // Shuffle all questions
+      for (let i = availableQuestions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [availableQuestions[i], availableQuestions[j]] = [availableQuestions[j], availableQuestions[i]];
+      }
+      
+      // Pick exactly the number requested, allowing repeats if needed
+      for (let i = 0; i < count; i++) {
+        if (availableQuestions.length > 0) {
+          questions.push(availableQuestions[i % availableQuestions.length]);
+        }
+      }
+      
+      return questions;
+    }
+
+    // Shuffle array function (Fisher-Yates shuffle)
+    function shuffleArray(array) {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
+    // ===== GAME LOGIC =====
+    function startAdventure() {
+      playClickSound();
+      
+      gameState.playerName = document.getElementById('playerName').value || 'Junior Explorer';
+      gameState.avatar = document.getElementById('avatarSelect').value;
+      gameState.category = document.getElementById('categorySelect').value;
+      gameState.difficulty = document.getElementById('difficultySelect').value;
+      gameState.timeLimit = parseInt(document.getElementById('timeLimit').value);
+      gameState.totalQuestions = parseInt(document.getElementById('questionCount').value);
+      gameState.currentQuestion = 0;
+      gameState.score = 0;
+      gameState.lives = 3;
+      gameState.questions = generateQuestions();
+      
+      if (gameState.questions.length === 0) {
+        alert('Not enough questions available! Try a different setting.');
+        return;
+      }
+      
+      document.getElementById('gameAvatar').textContent = gameState.avatar;
+      
+      showScreen('gameScreen');
+      showQuestion();
+    }
+
+    function showQuestion() {
+      if (gameState.currentQuestion >= gameState.questions.length || gameState.lives <= 0) {
+        endGame();
+        return;
+      }
+      
+      const q = gameState.questions[gameState.currentQuestion];
+      
+      document.getElementById('questionText').textContent = q.q;
+      document.getElementById('questionCategory').textContent = getCategoryEmoji(q.category) + ' ' + capitalize(q.category);
+      document.getElementById('questionCounter').textContent = `${gameState.currentQuestion + 1}/${gameState.questions.length}`;
+      document.getElementById('scoreDisplay').textContent = gameState.score;
+      
+      updateProgress();
+      updateLives();
+      
+      const container = document.getElementById('optionsContainer');
+      container.innerHTML = '';
+      
+      // SHUFFLE THE OPTIONS - so correct answer isn't always in the same position
+      const shuffledOptions = shuffleArray(q.options);
+      
+      shuffledOptions.forEach((opt, index) => {
+        const card = document.createElement('div');
+        card.className = 'option-card';
+        card.textContent = opt;
+        card.onclick = () => checkAnswer(opt, card);
+        card.style.animationDelay = `${index * 0.1}s`;
+        container.appendChild(card);
+      });
+      
+      document.getElementById('messageContainer').innerHTML = '';
+      
+      startTimer();
+    }
+
+    function checkAnswer(selected, card) {
+      clearInterval(gameState.timerInterval);
+      
+      const q = gameState.questions[gameState.currentQuestion];
+      const allCards = document.querySelectorAll('.option-card');
+      allCards.forEach(c => c.onclick = null);
+      
+      if (selected === q.answer) {
+        gameState.score++;
+        card.classList.add('correct');
+        playCorrectSound();
+        showMessage('🎉 Correct! You\'re amazing!', 'success');
+        createStars(20);
+      } else {
+        gameState.lives--;
+        card.classList.add('wrong');
+        playWrongSound();
+        showMessage(`❌ Oops! The correct answer is: ${q.answer}`, 'error');
+        
+        allCards.forEach(c => {
+          if (c.textContent === q.answer) {
+            c.classList.add('correct');
+          }
+        });
+      }
+      
+      updateLives();
+      
+      setTimeout(() => {
+        gameState.currentQuestion++;
+        showQuestion();
+      }, 2500);
+    }
+
+    function startTimer() {
+      let timeLeft = gameState.timeLimit;
+      document.getElementById('timerDisplay').textContent = timeLeft;
+      
+      gameState.timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timerDisplay').textContent = timeLeft;
+        
+        if (timeLeft <= 0) {
+          clearInterval(gameState.timerInterval);
+          gameState.lives--;
+          playWrongSound();
+          
+          const q = gameState.questions[gameState.currentQuestion];
+          showMessage(`⏱️ Time's up! The answer was: ${q.answer}`, 'error');
+          
+          const allCards = document.querySelectorAll('.option-card');
+          allCards.forEach(c => {
+            c.onclick = null;
+            if (c.textContent === q.answer) {
+              c.classList.add('correct');
+            }
+          });
+          
+          updateLives();
+          
+          setTimeout(() => {
+            gameState.currentQuestion++;
+            showQuestion();
+          }, 2500);
+        }
+      }, 1000);
+    }
+
+    function updateProgress() {
+      const percent = (gameState.currentQuestion / gameState.questions.length) * 100;
+      document.getElementById('progressBar').style.width = percent + '%';
+    }
+
+    function updateLives() {
+      document.getElementById('livesDisplay').textContent = '❤️'.repeat(Math.max(0, gameState.lives));
+    }
+
+    function showMessage(text, type) {
+      const container = document.getElementById('messageContainer');
+      container.innerHTML = `<div class="message-box ${type}">${text}</div>`;
+    }
+
+    function endGame() {
+      clearInterval(gameState.timerInterval);
+      
+      const percentage = (gameState.score / gameState.questions.length) * 100;
+      let emoji, title, message;
+      
+      if (percentage === 100) {
+        emoji = '🏆';
+        title = 'PERFECT SCORE!';
+        message = 'You\'re a Genius Explorer! 🌟';
+        createStars(100);
+      } else if (percentage >= 80) {
+        emoji = '🌟';
+        title = 'EXCELLENT WORK!';
+        message = 'Outstanding Knowledge! 🎓';
+        createStars(50);
+      } else if (percentage >= 60) {
+        emoji = '👍';
+        title = 'GREAT JOB!';
+        message = 'Keep Learning! 📚';
+        createStars(25);
+      } else if (percentage >= 40) {
+        emoji = '💪';
+        title = 'GOOD EFFORT!';
+        message = 'Practice Makes Perfect! 🌱';
+      } else {
+        emoji = '🌈';
+        title = 'KEEP TRYING!';
+        message = 'Every Adventure Teaches Us! 🦋';
+      }
+      
+      document.getElementById('finalEmoji').textContent = emoji;
+      document.getElementById('finalTitle').textContent = title;
+      document.getElementById('finalScore').textContent = `${gameState.score}/${gameState.questions.length}`;
+      document.getElementById('finalMessage').textContent = message;
+      document.getElementById('finalAvatar').textContent = gameState.avatar;
+      
+      saveToHistory();
+      showScreen('finalScreen');
+    }
+
+    function exitGame() {
+      if (confirm('🏠 Are you sure you want to exit? Your progress will be lost!')) {
+        clearInterval(gameState.timerInterval);
+        showHome();
+      }
+    }
+
+    function playAgain() {
+      playClickSound();
+      startAdventure();
+    }
+
+    // ===== VISUAL EFFECTS =====
+    function createStars(count) {
+      const container = document.getElementById('stars');
+      const emojis = ['⭐', '✨', '🌟', '💫', '🎉', '🎊'];
+      
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const star = document.createElement('div');
+          star.className = 'star';
+          star.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          star.style.left = Math.random() * 100 + '%';
+          star.style.top = Math.random() * 100 + '%';
+          container.appendChild(star);
+          
+          setTimeout(() => star.remove(), 1000);
+        }, i * 20);
+      }
+    }
+
+    // ===== HISTORY MANAGEMENT =====
+    function saveToHistory() {
+      const history = JSON.parse(localStorage.getItem('jungleSafariHistory') || '[]');
+      
+      history.unshift({
+        date: new Date().toLocaleString(),
+        player: gameState.playerName,
+        category: gameState.category,
+        difficulty: gameState.difficulty,
+        score: `${gameState.score}/${gameState.questions.length}`
+      });
+      
+      if (history.length > 20) history.pop();
+      
+      localStorage.setItem('jungleSafariHistory', JSON.stringify(history));
+    }
+
+    function loadHistory() {
+      const history = JSON.parse(localStorage.getItem('jungleSafariHistory') || '[]');
+      const tbody = document.getElementById('historyBody');
+      tbody.innerHTML = '';
+      
+      if (history.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="padding: 40px; color: #999;">🌴 No adventures yet! Start your safari! 🦁</td></tr>';
+        return;
+      }
+      
+      history.forEach(record => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+          <td>${record.date}</td>
+          <td>${record.player}</td>
+          <td>${capitalize(record.category)}</td>
+          <td>${capitalize(record.difficulty)}</td>
+          <td><strong>${record.score}</strong></td>
+        `;
+      });
+    }
+
+    function clearHistory() {
+      if (confirm('🗑️ Clear all game history? This cannot be undone!')) {
+        localStorage.removeItem('jungleSafariHistory');
+        playClickSound();
+        alert('✅ Hall of Fame cleared!');
+      }
+    }
+
+    // ===== HELPERS =====
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    function getCategoryEmoji(category) {
+      const emojis = {
+        math: '🔢',
+        science: '🔬',
+        english: '📖',
+        history: '🏛️',
+        nature: '🌿',
+        general: '🎯'
+      };
+      return emojis[category] || '📚';
+    }
+
+    // ===== INITIALIZATION =====
+    window.onload = () => {
+      showHome();
+      // Start background music on load
+      setTimeout(() => {
+        createSafariMusic();
+        if (document.getElementById('musicToggle').checked) {
+          backgroundMusic.start();
+        }
+      }, 500);
+    };
+  </script>
+</body>
+</html>
